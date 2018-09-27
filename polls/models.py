@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'GRN31'
+
 from django.db import models
 from django.utils import timezone
 import datetime

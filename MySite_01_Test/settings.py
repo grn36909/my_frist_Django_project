@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',      # 消息框架
     'django.contrib.staticfiles',   # 静态文件管理框架
 
-    #'polls.apps.PollsConfig',       # polls应用
+    # 'polls.apps.PollsConfig',       # polls应用
     'polls'
 ]
 

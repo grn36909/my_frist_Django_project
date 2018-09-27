@@ -9,6 +9,7 @@ __author__ = 'GRN31'
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
+from django.views import generic
 from django.template import loader
 from .models import Question, Choice
 # from django.template import loader
@@ -22,31 +23,22 @@ def hello(request):  # 显示欢迎信息
     return HttpResponse("Hello, world. You're at the polls index.")
 
 
-def index(request):  # index.html
-    # return HttpResponse("This is a index site of polls app.")
-    # output = '<br>'.join([q.question_text for q in latest_question_list])
-    # template = loader.get_template('polls/index.html')
-    # return HttpResponse(template.render(context, request))
-    # return render(request, 'polls/index.html', context)  # 返回一个经过字典数据渲染过的模板封装而成的HttpResponse对象
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]   # 最后5个Question
-    template = loader.get_template('polls/index.html')
-    context = {'latest_question_list': latest_question_list}            # 模板变量和Python对象之间的映射关系
-    return HttpResponse(template.render(context, request))
+class IndexView(generic.ListView):  # index
+    template_name = 'polls/index.html'                                  # 通过 template_name 属性指定模板名
+    context_object_name = 'latest_question_list'                        # 通过 context_object_name 指定
+
+    def get_queryset(self):
+        return Question.objects.order_by('-pub_date')[:5]               # 返回最近发布的5个投票
 
 
-def detail(request, question_id):   # 描述
-    # return HttpResponse("You'er looking at question %s." % question_id)
-    question = get_object_or_404(Question, pk=question_id)              # 对象不存在时弹出“404错误页面”
-    context = {'question': question}
-    return render(request, 'polls/detail.html', context)
+class DetailView(generic.DetailView):   # 描述
+    model = Question                                                    # 通过 model 属性指定模型
+    template_name = 'polls/detail.html'                                 # 通过 template_name 属性指定模板名
 
 
-def results(request, question_id):  # 结果
-    # response = "You'er looking at the results of question %s."
-    # return HttpResponse(response % question_id)
-    question = get_object_or_404(Question, pk=question_id)
-    context = {'question': question}
-    return render(request, 'polls/results.html', context)
+class ResultsView(generic.DetailView):  # 结果
+    model = Question
+    template_name = 'polls/results.html'
 
 
 def vote(request, question_id):     # 投票
