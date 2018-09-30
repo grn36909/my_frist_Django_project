@@ -21,6 +21,10 @@ class Question(models.Model):
     def __str__(self):
         return self.question_text
 
+    was_published_recently.admin_order_filed = 'pub_date'               # 排序方式
+    was_published_recently.boolean = True                               # bool 显示
+    was_published_recently.short_description = 'Published recently?'    # 描述
+
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)    # 外键关系: 每一个 Choice 关联到一个对应的 Question
